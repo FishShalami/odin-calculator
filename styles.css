@@ -1,0 +1,63 @@
+.container {
+    height: 600px;
+    width: 400px;
+    border: 10px solid black;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.display-top {
+    border: solid 2px grey;
+    height: 100px;
+    width: calc(100% - 32px); /* Matches container padding */    
+    margin: 5px auto;
+    text-align: right;
+    padding: 10px;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.display-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 0 auto;
+    gap: 5px;
+    padding: 16px;
+}
+
+.display-buttons button {
+    height: 95px;
+    flex: 1 0 calc(22% - 10px); /* Flexible button width */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2em;
+    font-weight: bold;
+    border: 2px solid #ccc;
+    border-radius: 8px; /* Optional: rounded corners */
+    background-color: #f4f4f4;
+    cursor: pointer;
+}
+
+.display-buttons .special-buttons {
+    background-color: aqua;
+}
+
+.display-buttons .operator {
+    background-color: lightcoral;
+}
+
+.display-buttons .num,
+.display-buttons #decimal {
+    background-color: lightgray;
+}
+
+.display-buttons #zero {
+    flex: 1 0 calc(46% - 10px); /* Spans two columns */
+}
+
+
+
