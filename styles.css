@@ -1,31 +1,49 @@
 .container {
+    box-sizing: border-box;
     height: 600px;
-    width: 400px;
+    max-width: 400px;
+    width: 100%;
     border: 10px solid black;
-    margin: auto;
+    margin: 0 auto;
     display: flex;
+    padding: 16px;
     flex-direction: column;
     justify-content: center;
+    gap: 16px;
 }
+
+
 
 .display-top {
-    border: solid 2px grey;
-    height: 100px;
-    width: calc(100% - 32px); /* Matches container padding */    
-    margin: 10px auto 5px auto;
-    text-align: right;
-    padding: 10px;
-    font-size: 1.5em;
-    font-weight: bold;
+    box-sizing: border-box; /* Includes padding and border in height/width */
+    border: solid 2px grey; /* Visible border */
+    height: calc(2.5em + 20px); /* Dynamic height: adjusts based on font size */
+    width: 100%;
+    padding: 25px 10px; /* Horizontal padding only */
+    font-size: 2.5em; /* Large font size */
+    font-weight: bold; /* Bold text */
+    line-height: 1; /* Compact line height (adjusted dynamically below) */
+    border-radius: 5px; /* Rounded corners */
+    display: flex; /* Flexbox for alignment */
+    justify-content: flex-end; /* Right-align the text */
+    align-items: center; /* Vertically center the text */
+    overflow: hidden; /* Prevent overflow outside the border */
+    white-space: nowrap; /* Prevent text wrapping */
 }
 
+
 .display-buttons {
+    width: 100%;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    margin: 0 auto;
+    /* margin: 0 auto; */
     gap: 5px;
-    padding: 16px;
+    padding: 0;
+}
+
+.clicked {
+    background-color: rgb(79, 141, 172) !important; /* Temporary feedback color */
 }
 
 .display-buttons button {
