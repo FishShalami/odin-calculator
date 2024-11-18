@@ -1,3 +1,10 @@
+// to-dos:
+//  - Add functionality for decimal place
+//  - Add functionality for pos/neg button
+//   - Add functionality for % button
+
+
+
 //functions for changing buttons on click
 const buttons = document.querySelectorAll('button')
 
@@ -119,10 +126,20 @@ const equalSelect = document.querySelector('#equal');
 const equals = function() {
     equalSelect.addEventListener("click", function(e) {
         if (num1 && num2 && opSelectChar) {
-            let result = operate(num1, num2, opSelectChar);
-            if (result % 1 !== 0) {
-                result = result.toFixed(13);
-            } 
+            let result; //initialze result
+            
+            //handle division by zero
+            if (Number(num2) === 0 && opSelectChar === '/') {
+                result = 'Nope!';
+            } else {
+            
+                result = operate(num1, num2, opSelectChar);
+                //round to 13 decimal places if not a whole number
+                if (result % 1 !== 0) {
+                    result = result.toFixed(13);
+                } 
+            }
+
             console.log(`${num1} ${opSelectChar} ${num2} = ${result}`);
             displayNumber.textContent = result;
             num1 = result;
@@ -135,7 +152,6 @@ const equals = function() {
 
 clearDisplay();
 userNumSelect();
-// num1 = numSelectValue;
 userOperatorSelect();
 equals();
 
@@ -149,18 +165,6 @@ displayScreen.appendChild(displayNumber);
 displayNumber.textContent = numSelectValue;
 
 
-
-//if user selects clear, then set all variables to default. clearing function:
-//variables set to '' or 0 and p element for the display set to ''
-
-
-
-//logic for operations:
-    //clear screen --> if user selects numbers, store number in a variable, num1
-    //once user selects an operator, store the operator selected as a variable, operator
-    //the next number entered is to be used as other number variable, num2
-    // use the operator function for operate(num1, num2, operator)
-    //store the result from operate in the calc display window p element and set it equal to num1 and await the next operator button
 
 
 
