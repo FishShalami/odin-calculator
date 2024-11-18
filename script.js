@@ -55,6 +55,7 @@ const numSelect = document.querySelectorAll(".num");
 let numSelectValue = ''
 let num1 = ''
 let num2 = ''
+let screenCleared = true;
 
 const userNumSelect = function() {
     for(let i = 0; i < numSelect.length; i++) {
@@ -78,14 +79,29 @@ const userOperatorSelect = function() {
     for(let i = 0; i < operatorSelect.length; i++) {
         operatorSelect[i].addEventListener("click", function(e) {
             opSelectChar = e.target.innerText; 
+            screenCleared = false;
             console.log("You clicked the " + opSelectChar + " button");
             return opSelectChar;
         });
     }
 }
 
+//function to clear the display
+const clearSelect = document.querySelector('#ac');
+
+
+const clearDisplay = function() {
+    clearSelect.addEventListener("click", function(e) {
+        displayNumber.textContent = '';
+        numSelectValue = '';
+        console.log('You pressed the clear button');
+        screenCleared = false;
+    })
+}
+
 userNumSelect();
 userOperatorSelect();
+clearDisplay();
 
 //display the value in the 'screen' of the calculator
 const displayScreen = document.querySelector(".display-num");
@@ -107,7 +123,7 @@ displayNumber.textContent = numSelectValue;
     //once user selects an operator, store the operator selected as a variable, operator
     //the next number entered is to be used as other number variable, num2
     // use the operator function for operate(num1, num2, operator)
-    //store the result from operate in the calc display window p element
+    //store the result from operate in the calc display window p element and set it equal to num1 and await the next operator button
 
 
 
