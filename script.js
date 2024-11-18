@@ -6,7 +6,7 @@ for(let i = 0; i < buttons.length; i++) {
         this.classList.add("clicked");
         setTimeout(() => {
             this.classList.remove("clicked");
-        }, 150);
+        }, 125);
     });
 
 }
@@ -55,20 +55,31 @@ const numSelect = document.querySelectorAll(".num");
 let numSelectValue = ''
 let num1 = ''
 let num2 = ''
-let screenCleared = true;
+let isEnteringSecondNumber = false;
 
 const userNumSelect = function() {
     for(let i = 0; i < numSelect.length; i++) {
         numSelect[i].addEventListener("click", function(e) {
+
+            if (isEnteringSecondNumber) {
+                numSelectValue = ''; // Clear numSelectValue for num2
+                displayNumber.textContent = ''; // Clear the display
+                isEnteringSecondNumber = false; // Reset flag
+            }
+
             numSelectValue += Number(e.target.innerText); //allows repeated button clicks for numbers like 222, or 1133
             // console.log("You clicked the " + numSelectValue + " button");
             displayNumber.textContent = numSelectValue;
-            // num1 = numSelectValue;
-            return numSelectValue;
+           
+            if (!opSelectChar) {
+                num1 = numSelectValue; // Update num1 if no operator selected
+            } else {
+                num2 = numSelectValue; // Update num2 after operator selection
+            }
         });
     
     }
-}
+};
 
 
 //operator selection function:
@@ -78,10 +89,12 @@ let opSelectChar = ''
 const userOperatorSelect = function() {
     for(let i = 0; i < operatorSelect.length; i++) {
         operatorSelect[i].addEventListener("click", function(e) {
-            opSelectChar = e.target.innerText; 
-            screenCleared = false;
-            console.log("You clicked the " + opSelectChar + " button");
-            return opSelectChar;
+            
+            if (num1 && !isEnteringSecondNumber) {
+                opSelectChar = e.target.innerText; // Store the selected operator
+                // console.log(`Operator selected: ${opSelectChar}`);
+                isEnteringSecondNumber = true; // Set flag to enter num2
+            }
         });
     }
 }
@@ -94,14 +107,38 @@ const clearDisplay = function() {
     clearSelect.addEventListener("click", function(e) {
         displayNumber.textContent = '';
         numSelectValue = '';
+        num1 = '';
+        opSelectChar = '';
         console.log('You pressed the clear button');
-        screenCleared = false;
-    })
+    });
 }
 
-userNumSelect();
-userOperatorSelect();
+//function for the equal operator
+const equalSelect = document.querySelector('#equal');
+    
+const equals = function() {
+    equalSelect.addEventListener("click", function(e) {
+        if (num1 && num2 && opSelectChar) {
+            let result = operate(num1, num2, opSelectChar);
+            if (result % 1 !== 0) {
+                result = result.toFixed(13);
+            } 
+            console.log(`${num1} ${opSelectChar} ${num2} = ${result}`);
+            displayNumber.textContent = result;
+            num1 = result;
+            num2 = '';
+            opSelectChar = '';
+            isEnteringSecondNumber = false;
+        }
+    });
+};
+
 clearDisplay();
+userNumSelect();
+// num1 = numSelectValue;
+userOperatorSelect();
+equals();
+
 
 //display the value in the 'screen' of the calculator
 const displayScreen = document.querySelector(".display-num");
