@@ -100,12 +100,26 @@ const decimalButtonSelect = function() {
     decimalButton.addEventListener("click", function(e) {
         console.log('The decimal button was pressed!');
         if(!isDecimal) {
-            numSelectValue += '.';
-            displayNumber.textContent = Number(numSelectValue);
+            if (isEnteringSecondNumber) {
+                // Reset for second number
+                numSelectValue = '';
+                displayNumber.textContent = '';
+                isEnteringSecondNumber = false;
+                isDecimal = false;
+                isPercent = false;
+            }
+            if(numSelectValue === '') {
+                numSelectValue = '0.'; // Start with '0.' if no number has been entered yet
+            } else {
+                numSelectValue += '.';
+            }
+            displayNumber.textContent = numSelectValue; // Display as string to avoid NaN
             isDecimal = true;
         }
     });
 }
+
+
 
 const percentButtonSelect = function() {
     percentButton.addEventListener("click", function(e) {
