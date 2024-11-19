@@ -1,7 +1,4 @@
-// to-dos:
-//  - Add functionality for decimal place
-//  - Add functionality for pos/neg button
-//   - Add functionality for % button
+//future changes, modify the decimal function such that it is ignored if the result is already a decimal.
 
 
 
@@ -23,11 +20,11 @@ for(let i = 0; i < buttons.length; i++) {
 //functions for add, subtract, multiply, divide
 
 const add = function(a, b) {
-    return a + b;
+    return Number(a) + Number(b);
 };
 
 const subtract = function(a, b) {
-    return a - b;
+    return Number(a) - Number(b);
 };
 
 const multiply = function(a, b) {
@@ -60,20 +57,51 @@ const operate = function(a, b, operator) {
 const numSelect = document.querySelectorAll(".num");
 const decimalButton = document.querySelector('#decimal');
 const percentButton = document.querySelector('#pct');
+const negButton = document.querySelector('#posneg');
 let numSelectValue = ''
 let num1 = ''
 let num2 = ''
 let isEnteringSecondNumber = false;
 let isDecimal = false;
 let isPercent = false;
+// let isNeg = false;
 
+
+
+
+
+
+const negButtonSelect = function() {
+    negButton.addEventListener("click", function(e) {
+        console.log('Invert button pushed');
+        
+        if (numSelectValue !== '') {
+            numSelectValue *= -1;
+            displayNumber.textContent = numSelectValue;
+
+            // Update the correct number
+            if (!opSelectChar) {
+                num1 = Number(numSelectValue); // Update num1 if no operator is selected
+            } else {
+                num2 = Number(numSelectValue); // Update num2 if operator is selected
+            }
+
+        } else if (num1 && !num2 && !isEnteringSecondNumber) {
+            // If result is displayed and no new number input yet, invert num1
+            num1 = (Number(num1) * -1);
+            displayNumber.textContent = num1;
+        }
+        
+        
+    });
+};
 
 const decimalButtonSelect = function() {
     decimalButton.addEventListener("click", function(e) {
         console.log('The decimal button was pressed!');
         if(!isDecimal) {
             numSelectValue += '.';
-            displayNumber.textContent = numSelectValue;
+            displayNumber.textContent = Number(numSelectValue);
             isDecimal = true;
         }
     });
@@ -82,13 +110,28 @@ const decimalButtonSelect = function() {
 const percentButtonSelect = function() {
     percentButton.addEventListener("click", function(e) {
         console.log('The percent button was pushed');
-        if (!isPercent && numSelectValue !== '') { // Only apply percentage if not already applied
-            numSelectValue = Number(numSelectValue) / 100;
-            displayNumber.textContent = numSelectValue;
-            isPercent = true; 
+        if (!isPercent) { // Only apply percentage if not already applied
+            if (numSelectValue !== '') {
+                numSelectValue = Number(numSelectValue) / 100;
+                displayNumber.textContent = numSelectValue;
+                isPercent = true; 
+                // Update the correct number
+                if (!opSelectChar) {
+                    num1 = numSelectValue; // Update num1 if no operator is selected
+                } else {
+                    num2 = numSelectValue; // Update num2 if operator is selected
+                }
+            } else if (num1 && !num2 && !isEnteringSecondNumber) {
+                // If result is displayed and no new number input yet, apply percent to num1
+                num1 = Number(num1) / 100;
+                displayNumber.textContent = num1;
+                isPercent = true;
+            }
         }
     });
 }
+
+
 
 const userNumSelect = function() {
     for(let i = 0; i < numSelect.length; i++) {
@@ -171,7 +214,7 @@ const equals = function() {
                 result = operate(num1, num2, opSelectChar);
                 //round to 13 decimal places if not a whole number
                 if (result % 1 !== 0) {
-                    result = result.toFixed(13).replace(/\.?0+$/, "");;
+                    result = Number(result.toFixed(13).replace(/\.?0+$/, ""));
                 } 
             }
 
@@ -180,6 +223,7 @@ const equals = function() {
             num1 = result;
             num2 = '';
             opSelectChar = '';
+            numSelectValue = ''; //Reset numSelectValue
             isEnteringSecondNumber = false;
         }
     });
@@ -187,6 +231,7 @@ const equals = function() {
 
 clearDisplay();
 decimalButtonSelect();
+negButtonSelect();
 percentButtonSelect()
 userNumSelect();
 userOperatorSelect();
