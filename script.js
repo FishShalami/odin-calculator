@@ -39,7 +39,6 @@ const divide = function(a ,b) {
 };
 
 
-//Create a new function operate that takes an operator and two numbers and then calls one of the above functions on the numbers.
 
 const operate = function(a, b, operator) {
     if (operator === '+') {
@@ -59,10 +58,37 @@ const operate = function(a, b, operator) {
 
 
 const numSelect = document.querySelectorAll(".num");
+const decimalButton = document.querySelector('#decimal');
+const percentButton = document.querySelector('#pct');
 let numSelectValue = ''
 let num1 = ''
 let num2 = ''
 let isEnteringSecondNumber = false;
+let isDecimal = false;
+let isPercent = false;
+
+
+const decimalButtonSelect = function() {
+    decimalButton.addEventListener("click", function(e) {
+        console.log('The decimal button was pressed!');
+        if(!isDecimal) {
+            numSelectValue += '.';
+            displayNumber.textContent = numSelectValue;
+            isDecimal = true;
+        }
+    });
+}
+
+const percentButtonSelect = function() {
+    percentButton.addEventListener("click", function(e) {
+        console.log('The percent button was pushed');
+        if (!isPercent && numSelectValue !== '') { // Only apply percentage if not already applied
+            numSelectValue = Number(numSelectValue) / 100;
+            displayNumber.textContent = numSelectValue;
+            isPercent = true; 
+        }
+    });
+}
 
 const userNumSelect = function() {
     for(let i = 0; i < numSelect.length; i++) {
@@ -72,11 +98,17 @@ const userNumSelect = function() {
                 numSelectValue = ''; // Clear numSelectValue for num2
                 displayNumber.textContent = ''; // Clear the display
                 isEnteringSecondNumber = false; // Reset flag
+                isDecimal = false;
+                isPercent = false;
             }
 
-            numSelectValue += Number(e.target.innerText); //allows repeated button clicks for numbers like 222, or 1133
-            // console.log("You clicked the " + numSelectValue + " button");
-            displayNumber.textContent = numSelectValue;
+            if (!isPercent) { 
+                // Only allow appending numbers if percentage is not applied
+                numSelectValue += e.target.innerText; 
+                console.log("You clicked the " + e.target.innerText + " button");
+                displayNumber.textContent = numSelectValue;
+            }
+
            
             if (!opSelectChar) {
                 num1 = numSelectValue; // Update num1 if no operator selected
@@ -120,6 +152,9 @@ const clearDisplay = function() {
     });
 }
 
+
+
+
 //function for the equal operator
 const equalSelect = document.querySelector('#equal');
     
@@ -136,7 +171,7 @@ const equals = function() {
                 result = operate(num1, num2, opSelectChar);
                 //round to 13 decimal places if not a whole number
                 if (result % 1 !== 0) {
-                    result = result.toFixed(13);
+                    result = result.toFixed(13).replace(/\.?0+$/, "");;
                 } 
             }
 
@@ -151,6 +186,8 @@ const equals = function() {
 };
 
 clearDisplay();
+decimalButtonSelect();
+percentButtonSelect()
 userNumSelect();
 userOperatorSelect();
 equals();
